@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %} New User {%endblock%}
+{% block content%}
+<h3 align="center"> Welcome</h3>
+<br/><br/>
+<div class="container-fluid">
+    <form enctype="multipart/form-data" method="POST">
+        {{ form.hidden_tag() }}
+        {{ form.first_name.label }} {{ form.first_name() }}<br>
+        {{ form.last_name.label }} {{ form.last_name() }}<br>
+        {{ form.email.label }} {{ form.email() }}<br>
+        {{ form.user_type.label }} {{ form.user_type() }}<br>
+        {{ form.date_registered.label }} {{ form.date_registered() }}<br>
+        {{ form.phone_no.label }} {{ form.phone_no() }}<br>
+        {{ form.password.label }} {{ form.password() }}<br>
+        {{ form.confirm_password.label }} {{ form.confirm_password() }}<br>
+        {{ form.image.label }} {{ form.image() }}<br>
+        {{ form.submit() }}
+        <br>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,4 @@
+/migrations
+.env
+/flaw
+__pycache__

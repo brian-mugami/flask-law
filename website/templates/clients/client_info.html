@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Client Information</h2>
+
+<p><strong>First Name:</strong> {{ client.first_name }}</p>
+<p><strong>Middle Name:</strong> {{ client.middle_name }}</p>
+<p><strong>Last Name:</strong> {{ client.last_name }}</p>
+<p><strong>Email:</strong> {{ client.email }}</p>
+<p><strong>Phone Number:</strong> {{ client.phone_no }}</p>
+<p><strong>Address:</strong> {{ client.address }}</p>
+<p><strong>Client Date:</strong> {{ client.client_date }}</p>
+<p><strong>Identification Number:</strong> {{ client.identification_no }}</p>
+<p><strong>Active:</strong> {{ "Yes" if client.is_active else "No" }}</p>
+<p><strong>Date Created:</strong> {{ client.date_created.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+<p><strong>Last Updated:</strong> {{ client.last_updated.strftime('%Y-%m-%d %H:%M:%S') if client.last_updated else 'N/A'
+    }}</p>
+
+<a href="{{ url_for('client_blp.get_clients') }}">Back to all clients</a>
+<a class="btn" href="{{ url_for('client_blp.edit_client', id=client.id) }}">Edit Client</a>
+{% endblock %}

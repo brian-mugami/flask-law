@@ -1,0 +1,14 @@
+flask
+flask-sqlalchemy
+flask-wtf
+flask-login
+flask-babel
+flask-migrate
+psycopg2
+python-dotenv
+flask-cors
+flask-bcrypt
+passlib
+flask-reuploaded
+email-validator
+flask-babel

@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{%block title%} Users {%endblock%}
+{% block content%}
+<br>
+<div class="card m-4">
+    <div class="card-body row">
+        <form action="{{ url_for('auth_blp.all_users') }}" class="mb-3 mb-lg-0 " method="GET">
+            <div class="form-row row align-items-center">
+                <div class="col-sm-4">
+                    <label class="sr-only" for="emailFilter">Email</label>
+                    <input class="form-control mb-2 mb-lg-0" id="emailFilter" name="emailFilter" placeholder="User Name"
+                           type="text">
+                </div>
+                <div class="col-sm-2">
+                    <button class="btn btn-primary " type="submit">
+                        Search
+                        <svg class="bi bi-search" fill="currentColor" height="16" viewBox="0 0 16 16"
+                             width="16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<a href="{{ url_for('auth_blp.new_user') }}">
+    <button>New User</button>
+</a>
+<div class="container-fluid card ">
+    <table class="table ">
+        <thead>
+        <tr>
+            <th scope="col">email</th>
+            <th class="d-none d-md-table-cell" scope="col">Phone</th>
+            <th class="d-none d-md-table-cell" scope="col">First Name</th>
+            <th class="d-none d-md-table-cell" scope="col">Last Name</th>
+            <th scope="col">Status</th>
+            <th scope="col">Type</th>
+            <th scope="col">Confirm Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if users %}
+        {% for user in users %}
+        <tr>
+            <th scope="col"><a href="{{url_for('auth_blp.user_info',id=user.id)}}">{{user.email}}</a></th>
+            <td class="d-none d-md-table-cell">{{user.phone_no}}</td>
+            <td class="d-none d-md-table-cell">{{user.first_name}}</td>
+            <td class="d-none d-md-table-cell">{{user.last_name}}</td>
+            {% if user.is_active %}
+            <td>Active</td>
+            {% else %}
+            <td>Inactive</td>
+            {% endif %}
+            <td>{{user.user_type}}</td>
+            {% if user.most_recent_confirmation.confirmed %}
+            <td>Confirmed</td>
+            {% else %}
+            <td>Not Confirmed</td>
+            {% endif%}
+        </tr>
+        {% endfor %}
+        {% else%}
+        <p>No users here</p>
+        {% endif %}
+        </tbody>
+    </table>
+</div>
+<div align="center">
+    {% if users.has_prev %}
+    <a class="btn btn-outline-info btn-sm mt-3"
+       href="{{url_for('auth_blp.all_users', page=users.prev_num)}}">&laquo;</a>
+    {% endif %}
+    {% for page_num in users.iter_pages()%}
+    {% if page_num %}
+    {%if users.page == page_num%}
+    <a class="btn btn-info btn-sm mt-3" href="{{url_for('auth_blp.all_users', page=page_num)}}">{{page_num}}</a>
+    {%else%}
+    <a class="btn btn-outline-info btn-sm mt-3"
+       href="{{url_for('auth_blp.all_users', page=page_num)}}">{{page_num}}</a>
+    {% endif%}
+    {% else %}
+    ....
+    {%endif%}
+    {% endfor %}
+    {% if users.has_next %}
+    <a class="btn btn-outline-info btn-sm mt-3"
+       href="{{url_for('auth_blp.all_users', page=users.next_num)}}">&raquo;</a>
+    {% endif %}
+</div>
+{% endblock %}

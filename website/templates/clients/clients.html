@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{%block title%} Clients {%endblock%}
+{% block content%}
+<br>
+<div class="card m-4">
+    <div class="card-body row">
+        <form action="{{ url_for('client_blp.get_clients') }}" class="mb-3 mb-lg-0 " method="GET">
+            <div class="form-row row align-items-center">
+                <div class="col-sm-4">
+                    <label class="sr-only" for="nameFilter">Name</label>
+                    <input class="form-control mb-2 mb-lg-0" id="nameFilter" name="nameFilter" placeholder="Name"
+                           type="text">
+                </div>
+                <div class="col-sm-2">
+                    <button class="btn btn-primary " type="submit">
+                        Search
+                        <svg class="bi bi-search" fill="currentColor" height="16" viewBox="0 0 16 16"
+                             width="16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<a href="{{ url_for('client_blp.new_client') }}">
+    <button>New Client</button>
+</a>
+<div class="container-fluid card ">
+    <table class="table ">
+        <thead>
+        <tr>
+            <th scope="col">email</th>
+            <th class="d-none d-md-table-cell" scope="col">Phone</th>
+            <th class="d-none d-md-table-cell" scope="col">First Name</th>
+            <th class="d-none d-md-table-cell" scope="col">Last Name</th>
+            <th scope="col">Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if clients %}
+        {% for user in clients %}
+        <tr>
+            <th scope="col"><a href="{{url_for('client_blp.get_client',id=user.id)}}">{{user.email}}</a></th>
+            <td class="d-none d-md-table-cell">{{user.phone_no}}</td>
+            <td class="d-none d-md-table-cell">{{user.first_name}}</td>
+            <td class="d-none d-md-table-cell">{{user.last_name}}</td>
+            {% if user.is_active %}
+            <td>Active</td>
+            {% else %}
+            <td>Inactive</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+        {% else%}
+        <p>No Clients Yet</p>
+        {% endif %}
+        </tbody>
+    </table>
+</div>
+<div align="center">
+    {% if clients.has_prev %}
+    <a class="btn btn-outline-info btn-sm mt-3"
+       href="{{url_for('client_blp.get_clients', page=clients.prev_num)}}">&laquo;</a>
+    {% endif %}
+    {% for page_num in clients.iter_pages()%}
+    {% if page_num %}
+    {%if clients.page == page_num%}
+    <a class="btn btn-info btn-sm mt-3" href="{{url_for('client_blp.get_clients', page=page_num)}}">{{page_num}}</a>
+    {%else%}
+    <a class="btn btn-outline-info btn-sm mt-3"
+       href="{{url_for('auth_blp.all_users', page=page_num)}}">{{page_num}}</a>
+    {% endif%}
+    {% else %}
+    ....
+    {%endif%}
+    {% endfor %}
+    {% if clients.has_next %}
+    <a class="btn btn-outline-info btn-sm mt-3"
+       href="{{url_for('client_blp.get_clients', page=clients.next_num)}}">&raquo;</a>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %} user info {%endblock%}
+{% block content%}
+<br/><br/>
+<div class="container">
+    <h1>User Information</h1>
+    <div class="user-info">
+        <p><strong>First Name:</strong> {{ user_info.first_name }}</p>
+        <p><strong>Last Name:</strong> {{ user_info.last_name }}</p>
+        <p><strong>Email:</strong> {{ user_info.email }}</p>
+        <p><strong>Phone Number:</strong> {{ user_info.phone_no }}</p>
+        <p><strong>User Type:</strong> {{ user_info.user_type }}</p>
+        <p><strong>User Status:</strong> {{ 'Active' if user_info.is_active else 'Inactive' }}</p>
+        <p><strong>Date Registered:</strong> {{ user_info.date_registered.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+        {% if user_info.image %}
+        <p><strong>Image:</strong> <img alt="User Image"
+                                        class="user-image"
+                                        src="{{ url_for('static', filename='uploads/' ~ user_info.image) }}"></p>
+        {% endif %}
+        <br>
+        <p><strong>Creation Date:</strong> {{ user_info.creation_date }}</p>
+        <p><strong>Last Login In Date:</strong> {{ user_info.last_login }}</p>
+        <p><strong>Update Date:</strong> {{ user_info.update_date }}</p>
+    </div>
+    <a class="btn" href="{{ url_for('auth_blp.all_users') }}">Back</a>
+    <a class="btn" href="{{ url_for('auth_blp.edit_user', id=user_info.id) }}">Edit User</a>
+</div>
+{% endblock %}

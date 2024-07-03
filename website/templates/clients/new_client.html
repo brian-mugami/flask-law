@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Create Client</h2>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    {{ form.first_name.label }} {{ form.first_name() }}
+    {{ form.middle_name.label }} {{ form.middle_name() }}
+    {{ form.last_name.label }} {{ form.last_name() }}
+    {{ form.email.label }} {{ form.email() }}
+    {{ form.phone_no.label }} {{ form.phone_no() }}
+    {{ form.address.label }} {{ form.address() }}
+    {{ form.client_date.label }} {{ form.client_date() }}
+    {{ form.identification_no.label }} {{ form.identification_no() }}
+    {{ form.is_active() }} {{ form.is_active.label }}
+    {{ form.submit() }}
+</form>
+<a class="btn" href="{{ next or url_for('client_blp.get_clients') }}">Cancel</a>
+{% endblock %}

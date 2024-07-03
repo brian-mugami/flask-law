@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{%block title%} Edit User {%endblock%}
+{% block content%}
+<div class="container">
+    <h1>Edit User Details</h1>
+    <form enctype="multipart/form-data" method="POST">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.first_name.label }} {{ form.first_name(class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.last_name.label }} {{ form.last_name(class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.email.label }} {{ form.email(class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.phone_no.label }} {{ form.phone_no(class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.password.label }} {{ form.password(class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.user_type.label }} {{ form.user_type(class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.date_registered.label }} {{ form.date_registered(class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.is_active.label }} {{ form.is_active(class="form-check-input") }}
+        </div>
+        <div class="form-group">
+            {{ form.image.label }} {{ form.image(class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+    </form>
+    <a class="btn" href="{{ url_for('auth_blp.user_info', id=user.id) }}">Cancel</a>
+</div>
+{% endblock %}
