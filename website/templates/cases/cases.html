@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
-{%block title%} Clients {%endblock%}
+{%block title%} Cases {%endblock%}
 {% block content%}
 <br>
 <div class="card m-4">
     <div class="card-body row">
-        <form action="{{ url_for('client_blp.get_clients') }}" class="mb-3 mb-lg-0 " method="GET">
+        <form action="{{ url_for('case_blp.all_cases') }}" class="mb-3 mb-lg-0 " method="GET">
             <div class="form-row row align-items-center">
                 <div class="col-sm-4">
                     <label class="sr-only" for="nameFilter">Name</label>
@@ -24,61 +24,57 @@
         </form>
     </div>
 </div>
-<a href="{{ url_for('client_blp.new_client') }}">
-    <button>New Client</button>
+<a href="{{ url_for('case_blp.new_case') }}">
+    <button>New Case</button>
 </a>
 <div class="container-fluid card ">
     <table class="table ">
         <thead>
         <tr>
-            <th scope="col">email</th>
-            <th class="d-none d-md-table-cell" scope="col">Phone</th>
-            <th class="d-none d-md-table-cell" scope="col">First Name</th>
-            <th class="d-none d-md-table-cell" scope="col">Last Name</th>
+            <th scope="col">Case Number</th>
+            <th class="d-none d-md-table-cell" scope="col">Case Title</th>
+            <th class="d-none d-md-table-cell" scope="col">Court Date</th>
+            <th class="d-none d-md-table-cell" scope="col">Priority</th>
             <th scope="col">Status</th>
         </tr>
         </thead>
         <tbody>
-        {% if clients %}
-        {% for user in clients %}
+        {% if cases %}
+        {% for case in cases %}
         <tr>
-            <th scope="col"><a href="{{url_for('client_blp.get_client',id=user.id)}}">{{user.email}}</a></th>
-            <td class="d-none d-md-table-cell">{{user.phone_no}}</td>
-            <td class="d-none d-md-table-cell">{{user.first_name}}</td>
-            <td class="d-none d-md-table-cell">{{user.last_name}}</td>
-            {% if user.is_active %}
-            <td>Active</td>
-            {% else %}
-            <td>Inactive</td>
-            {% endif %}
+            <th scope="col"><a href="{{url_for('case_blp.get_case',id=case.id)}}">{{case.case_number}}</a></th>
+            <td class="d-none d-md-table-cell">{{case.title}}</td>
+            <td class="d-none d-md-table-cell">{{case.court_date}}</td>
+            <td class="d-none d-md-table-cell">{{case.priority}}</td>
+            <td class="d-none d-md-table-cell">{{case.status}}</td>
         </tr>
         {% endfor %}
         {% else%}
-        <p>No Clients Yet</p>
+        <p>No Cases Yet</p>
         {% endif %}
         </tbody>
     </table>
 </div>
 <div align="center">
-    {% if clients.has_prev %}
+    {% if cases.has_prev %}
     <a class="btn btn-outline-info btn-sm mt-3"
-       href="{{url_for('client_blp.get_clients', page=clients.prev_num)}}">&laquo;</a>
+       href="{{url_for('case_blp.all_cases', page=cases.prev_num)}}">&laquo;</a>
     {% endif %}
-    {% for page_num in clients.iter_pages()%}
+    {% for page_num in cases.iter_pages()%}
     {% if page_num %}
-    {%if clients.page == page_num%}
-    <a class="btn btn-info btn-sm mt-3" href="{{url_for('client_blp.get_clients', page=page_num)}}">{{page_num}}</a>
+    {%if cases.page == page_num%}
+    <a class="btn btn-info btn-sm mt-3" href="{{url_for('case_blp.all_cases', page=page_num)}}">{{page_num}}</a>
     {%else%}
     <a class="btn btn-outline-info btn-sm mt-3"
-       href="{{url_for('lient_blp.get_clients', page=page_num)}}">{{page_num}}</a>
+       href="{{url_for('case_blp.all_cases', page=page_num)}}">{{page_num}}</a>
     {% endif%}
     {% else %}
     ....
     {%endif%}
     {% endfor %}
-    {% if clients.has_next %}
+    {% if cases.has_next %}
     <a class="btn btn-outline-info btn-sm mt-3"
-       href="{{url_for('client_blp.get_clients', page=clients.next_num)}}">&raquo;</a>
+       href="{{url_for('case_blp.all_cases', page=cases.next_num)}}">&raquo;</a>
     {% endif %}
 </div>
 {% endblock %}

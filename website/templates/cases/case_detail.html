@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title%} Case Details{%endblock%}
+{% block content %}
+<div class="container">
+    <h2>Case Details</h2>
+    <table class="table table-bordered">
+        <tr>
+            <th>Judge Name</th>
+            <td>{{ case_detail.judge_name }}</td>
+        </tr>
+        <tr>
+            <th>Court Type</th>
+            <td>{{ case_detail.court_type }}</td>
+        </tr>
+        <tr>
+            <th>Court Description</th>
+            <td>{{ case_detail.court_description }}</td>
+        </tr>
+        <tr>
+            <th>Court Location</th>
+            <td>{{ case_detail.court_location }}</td>
+        </tr>
+        <tr>
+            <th>Case Hearing Date</th>
+            <td>{{ case_detail.case_hearing_date.strftime('%Y-%m-%d') if case_detail.case_hearing_date else 'N/A' }}
+            </td>
+        </tr>
+        <tr>
+            <th>Case Judgment</th>
+            <td>{{ case_detail.case_judgment }}</td>
+        </tr>
+        <tr>
+            <th>Case Outcome</th>
+            <td>{{ case_detail.case_outcome }}</td>
+        </tr>
+        <tr>
+            <th>Assigned Prosecutor</th>
+            <td>{{ case_detail.assigned_prosecutor }}</td>
+        </tr>
+        <tr>
+            <th>Evidence Details</th>
+            <td>{{ case_detail.evidence_details }}</td>
+        </tr>
+        <tr>
+            <th>Update Date</th>
+            <td>{{ case_detail.last_updated.strftime('%Y-%m-%d') if case_detail.last_updated else 'N/A' }}</td>
+        </tr>
+    </table>
+    <a href="{{ next or url_for('case_blp.get_cases') }}" class="btn btn-secondary">Back</a>
+    <a href="{{ url_for('case_blp.edit_case_detail', id=case_detail.id) }}" class="btn btn-danger">Edit</a>
+</div>
+{% endblock %}

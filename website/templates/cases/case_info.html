@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{%block title%} Case Info {%endblock%}
+{% block content %}
+<h2>Case Information</h2>
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Case Number: {{ case.case_number }}</h5>
+        <p class="card-text"><strong>Title:</strong> {{ case.title }}</p>
+        <p class="card-text"><strong>Description:</strong> {{ case.description }}</p>
+        <p class="card-text"><strong>Status:</strong> {{ case.status }}</p>
+        <p class="card-text"><strong>Case Type:</strong> {{ case.case_type }}</p>
+        <p class="card-text"><strong>Case Description:</strong> {{ case.case_description }}</p>
+        <p class="card-text"><strong>Filed Date:</strong> {{ case.filed_date.strftime('%Y-%m-%d') }}</p>
+        <p class="card-text"><strong>Court Date:</strong> {% if case.court_date %}{{
+            case.court_date.strftime('%Y-%m-%d') }}{% else %}Not Set{% endif %}</p>
+        <p class="card-text"><strong>Resolution Date:</strong> {% if case.resolution_date %}{{
+            case.resolution_date.strftime('%Y-%m-%d') }}{% else %}Not Set{% endif %}</p>
+        <p class="card-text"><strong>Resolution:</strong> {% if case.resolution %}{{ case.resolution }}{% else %}Not
+            Set{% endif %}</p>
+        <p class="card-text"><strong>Priority:</strong> {{ case.priority }}</p>
+        <p class="card-text"><strong>Client:</strong> <a href="{{url_for('client_blp.get_client',id=case.client.id)}}">{{
+            case.client.email }}</a></p>
+        <p class="card-text"><strong>Assigned Attorneys:</strong>
+        <ul>
+            {% for attorney in case.attorneys %}
+            <li><a href="{{url_for('auth_blp.user_info',id=attorney.id)}}"> {{ attorney.first_name }}
+                {{attorney.last_name}}</a></li>
+            {% endfor %}
+        </ul>
+        </p>
+        <p class="card-text"><strong>Date Created:</strong> {{ case.date_created.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+        <p class="card-text"><strong>Last Updated:</strong> {% if case.last_updated %}{{
+            case.last_updated.strftime('%Y-%m-%d') }}{% else %}Not Set{% endif %}</p>
+    </div>
+</div>
+<a class="btn btn-primary" href="{{ next or url_for('case_blp.all_cases') }}">Back</a>
+<a class="btn btn-primary" href="{{url_for('case_blp.edit_case', id=case.id) }}">Edit Case</a>
+<a class="btn btn-warning" href="{{url_for('case_blp.assign_cases', id=case.id) }}">Add Attorney</a>
+<a class="btn btn-dark" href="{{url_for('case_blp.view_notes', id=case.id) }}">View Notes({{ count }})</a>
+<a class="btn btn-success" href="{{url_for('case_blp.view_attachments', id=case.id) }}">View Case Attachments</a>
+{% if case.case_details%}
+<a class="btn btn-secondary" href="{{url_for('case_blp.view_case_detail', id=case.id) }}">View Case Details</a>
+{% else%}
+<a class="btn btn-danger" href="{{url_for('case_blp.case_detail', id=case.id) }}">Add Case Details</a>
+{%endif%}
+{% endblock %}

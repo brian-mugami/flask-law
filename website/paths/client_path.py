@@ -1,13 +1,17 @@
 import traceback
+from datetime import datetime
 
 from flask import Blueprint, request, render_template, flash, redirect, url_for
 from flask_login import current_user, login_required
+from passlib.handlers.pbkdf2 import pbkdf2_sha256
 from sqlalchemy import or_
 from sqlalchemy.exc import IntegrityError
 
+from .. import UserModel
 from ..db import db
-from ..forms import CreateClientForm
-from ..models import ClientModel
+from ..forms import CreateClientForm, RegistrationForm
+from ..libs.send_email import MailgunException
+from ..models import ClientModel, ConfirmationModel
 
 client_blp = Blueprint("client_blp", __name__, static_folder="static", template_folder="templates")
 
@@ -19,6 +23,10 @@ CREATED_SUCCESSFULLY = "Client created successfully."
 INTEGRITY_ERROR = "Integrity error occurred, Please check the details and ensure no duplicates."
 SERVER_ERROR = "Server error occurred."
 CLIENT_UPDATED_SUCCESS = "Client Updated Successfully"
+PASSWORD_MISMATCH_ERROR = "Passwords do not match."
+CLIENT_CREATED_SUCCESS = "Client account created successfully and confirmation email sent."
+CLIENT_NAME_EXISTS = "A client with this name already exists."
+EMAIL_ERROR = "There was an error sending the confirmation email."
 
 
 @client_blp.route("/")
@@ -121,3 +129,43 @@ def new_client():
             traceback.print_exc()
             flash(SERVER_ERROR, category="error")
     return render_template("clients/new_client.html", user=current_user, form=form, next=request.referrer)
+
+
+@client_blp.route("/new/<int:id>/account", methods=["POST", "GET"])
+@login_required
+def new_client_account(id):
+    client = ClientModel.find_by_id(id)
+    form = RegistrationForm(obj=client)
+    if not client:
+        flash(CLIENT_NOT_FOUND, category="error")
+    pass1 = form.password.data
+    pass2 = form.confirm_password.data
+    if request.method == 'POST':
+        if pass1 != pass2:
+            flash(PASSWORD_MISMATCH_ERROR, category="error")
+        user = UserModel(email=form.email.data, phone_no=form.phone_no.data, user_type="client",
+                         last_name=form.last_name.data,
+                         first_name=form.first_name.data, password=pbkdf2_sha256.hash(pass1),
+                         date_registered=datetime.utcnow())
+        try:
+            user.save_to_db()
+            confirmation = ConfirmationModel(user.id)
+            confirmation.save_to_db()
+            user.send_email()
+            flash(CLIENT_CREATED_SUCCESS, "success")
+            return redirect(url_for("client_blp.get_client", id=id))
+        except IntegrityError as e:
+            db.session.rollback()
+            if "users_first_name_last_name_key" in str(e.orig):
+                flash(CLIENT_NAME_EXISTS, category="error")
+            else:
+                flash(SERVER_ERROR, category="error")
+        except MailgunException as e:
+            user.delete_from_db()
+            traceback.print_exc()
+            flash(EMAIL_ERROR, category="error")
+        except Exception as e:
+            user.delete_from_db()
+            traceback.print_exc()
+            flash(SERVER_ERROR, category="error")
+    return render_template("clients/new_client_account.html", user=current_user, form=form, next=request.referrer, client=client)

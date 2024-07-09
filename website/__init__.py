@@ -6,7 +6,7 @@ from flask_uploads import configure_uploads
 
 from .db import db
 from .models import UserModel
-from .photos import photos
+from .photos import photos, attachments
 
 migrate = Migrate()
 cors = CORS()
@@ -22,6 +22,7 @@ def create_app():
     cors.init_app(app, resources={r"*": {"origins": "*"}})
     login_manager.init_app(app)
     configure_uploads(app, photos)
+    configure_uploads(app, attachments)
     login_manager.login_view = 'auth.login'
 
     @login_manager.user_loader
@@ -36,8 +37,9 @@ def create_app():
     def server_error(e):
         return render_template('500.html', user=current_user), 500
 
-    from .paths import home_blp, auth_blp, client_blp
+    from .paths import home_blp, auth_blp, client_blp, case_blp
     app.register_blueprint(home_blp)
     app.register_blueprint(auth_blp, url_prefix="/auth")
     app.register_blueprint(client_blp, url_prefix="/client")
+    app.register_blueprint(case_blp, url_prefix="/case")
     return app

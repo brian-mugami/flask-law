@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}Edit Case{% endblock %}
+{% block content %}
+<h2>Edit Case</h2>
+<form method="POST" action="{{ url_for('case_blp.edit_case', id=case.id) }}">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        {{ form.case_number.label(class="form-label") }}
+        {{ form.case_number(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.title.label(class="form-label") }}
+        {{ form.title(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.description.label(class="form-label") }}
+        {{ form.description(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.status.label(class="form-label") }}
+        {{ form.status(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.case_type.label(class="form-label") }}
+        {{ form.case_type(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.case_description.label(class="form-label") }}
+        {{ form.case_description(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.filed_date.label(class="form-label") }}
+        {{ form.filed_date(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.court_date.label(class="form-label") }}
+        {{ form.court_date(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.resolution_date.label(class="form-label") }}
+        {{ form.resolution_date(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.resolution.label(class="form-label") }}
+        {{ form.resolution(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.priority.label(class="form-label") }}
+        {{ form.priority(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.client.label(class="form-label") }}
+        {{ form.client(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.submit(class="btn btn-primary") }}
+        <a class="btn btn-secondary" href="{{ next or url_for('case_blp.get_case', id=case.id) }}">Cancel</a>
+    </div>
+</form>
+{% endblock %}

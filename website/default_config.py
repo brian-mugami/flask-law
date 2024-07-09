@@ -6,6 +6,7 @@ load_dotenv(".env", verbose=True)
 DEBUG = True
 basedir = os.path.abspath(os.path.dirname(__file__))
 UPLOADED_PHOTOS_DEST = os.path.join(basedir, "static/uploads")
+UPLOADED_ATTACHMENTS_DEST = os.path.join(basedir, "static/attachments")
 base_dir = os.path.abspath(os.path.dirname(__file__))
 URI = "sqlite:///" + os.path.join(base_dir, "database.db")
 load_dotenv(".env", verbose=True)

@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block title %} Attachments for Case {{ case.case_number }} {% endblock %}
+{% block content %}
+<h2>Attachments for Case {{ case.case_number }}</h2>
+<div class="card-body row">
+    <form action="{{ url_for('case_blp.view_attachments', id=case.id) }}" class="mb-3 mb-lg-0 " method="GET">
+        <div class="form-row row align-items-center">
+            <div class="col-sm-4">
+                <label class="sr-only" for="description">Description</label>
+                <input class="form-control mb-2 mb-lg-0" id="description" name="description" placeholder="Description"
+                       type="text">
+            </div>
+            <div class="col-sm-2">
+                <button class="btn btn-primary " type="submit">
+                    Search
+                    <svg class="bi bi-search" fill="currentColor" height="16" viewBox="0 0 16 16"
+                         width="16" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+{% if attachments %}
+{% for attachment in attachments %}
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-title">{{ attachment.filename }}</h5>
+        <p class="card-text">Description: {{ attachment.description }}</p>
+
+        {% if attachment.file_url.endswith('.pdf') %}
+        <embed src="{{ url_for('static', filename='attachments/' + case.case_number + '/' + attachment.attachment_filename) }}"
+               type="application/pdf" width="400px" height="200px">
+        <a class="btn btn-primary mt-2"
+           href="{{ url_for('static', filename='attachments/' + case.case_number + '/' + attachment.attachment_filename) }}"
+           target="_blank"
+           rel="noopener noreferrer">View PDF</a>
+        {% else %}
+        <a class="btn btn-primary mt-2"
+           href="{{ url_for('static', filename='attachments/' + case.case_number + '/' + attachment.attachment_filename) }}"
+           target="_blank"
+           rel="noopener noreferrer">Download</a>
+        {% endif %}
+        {% if attachment.user_id == user.id%}
+        <a class="btn btn-warning mt-2" href="{{ url_for('case_blp.edit_attachment', id=attachment.id) }}">Edit</a>
+        {% endif %}
+        <p class="card-text">Uploaded by: <a href="{{url_for('auth_blp.user_info',id=attachment.user.id)}}">{{
+            attachment.user.first_name }} {{ attachment.user.last_name }}</a></p>
+        <p class="card-text">Uploaded on: {{ attachment.uploaded_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+    </div>
+</div>
+{% endfor %}
+{% else %}
+<p>No attachments found for this case.</p>
+{% endif %}
+<a class="btn btn-primary" href="{{ url_for('case_blp.get_case', id=case.id) }}">Back to Case Details</a>
+<a class="btn btn-success" href="{{url_for('case_blp.case_attachment', id=case.id) }}">Add Attachment</a>
+<div align="center">
+    {% if attachments.has_prev %}
+    <a class="btn btn-outline-info btn-sm mt-3"
+       href="{{url_for('case_blp.view_attachments', page=attachments.prev_num, id=case.id)}}">&laquo;</a>
+    {% endif %}
+    {% for page_num in attachments.iter_pages()%}
+    {% if page_num %}
+    {%if attachments.page == page_num%}
+    <a class="btn btn-info btn-sm mt-3"
+       href="{{url_for('case_blp.view_attachments', page=page_num,id=case.id)}}">{{page_num}}</a>
+    {%else%}
+    <a class="btn btn-outline-info btn-sm mt-3"
+       href="{{url_for('case_blp.view_attachments', page=page_num,id=case.id)}}">{{page_num}}</a>
+    {% endif%}
+    {% else %}
+    ....
+    {%endif%}
+    {% endfor %}
+    {% if attachments.has_next %}
+    <a class="btn btn-outline-info btn-sm mt-3"
+       href="{{url_for('case_blp.view_attachments', page=attachments.next_num,id=case.id)}}">&raquo;</a>
+    {% endif %}
+</div>
+{% endblock %}

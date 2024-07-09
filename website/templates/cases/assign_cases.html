@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{%block title %} Assign {%endblock%}
+{% block content %}
+<h2>Assign Attorneys to Case</h2>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    {{ form.attorneys.label (class="form-label", id="label")}}
+    {{ form.attorneys(class="form-control") }}
+
+    </br>
+    {{ form.submit(class="btn btn-dark mb-3") }}
+    </br>
+</form>
+{% endblock %}

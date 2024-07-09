@@ -19,7 +19,9 @@ class RegistrationForm(FlaskForm):
     date_registered = DateField("Date Registered", default=datetime.utcnow(), validators=[DataRequired(), ])
     user_type = SelectField('User Type',
                             choices=[('admin', 'Admin'), ('super_admin', 'Super Admin'),
-                                     ('advocate', 'Advocate'), ('associate', 'Associate'), ('intern', 'Intern')],
+                                     ('advocate', 'Advocate'), ('associate', 'Associate'), ('secretary', 'Secretary'),
+                                     ('intern', 'Intern'),
+                                     ('lawyer', 'Lawyer')],
                             validators=[DataRequired()])
     image = FileField('User Image',
                       validators=[FileAllowed(['jpg', 'png', 'jpeg'], 'Images Only Please')])

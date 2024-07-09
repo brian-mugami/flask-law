@@ -23,6 +23,11 @@ class ClientModel(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     user = db.relationship("UserModel", back_populates="clients")
 
+    cases = db.relationship("CaseModel", back_populates="client", lazy="dynamic", cascade="all, delete-orphan")
+
+    def __repr__(self):
+        return f"{self.first_name} {self.middle_name} {self.last_name}"
+
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()

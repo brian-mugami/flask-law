@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{%block title%} Create Case{%endblock%}
+{% block content %}
+<h2>Create Case</h2>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        {{ form.case_number.label }} {{ form.case_number(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.title.label }} {{ form.title(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.description.label }} {{ form.description(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.status.label }} {{ form.status(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.case_type.label }} {{ form.case_type(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.case_description.label }} {{ form.case_description(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.filed_date.label }} {{ form.filed_date(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.court_date.label }} {{ form.court_date(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.resolution_date.label }} {{ form.resolution_date(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.resolution.label }} {{ form.resolution(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.priority.label }} {{ form.priority(class="form-control") }}
+    </div>
+    <button type="submit" class="btn btn-primary">Create Case</button>
+    <a class="btn btn-secondary" href="{{ next or url_for('client_blp.get_cases') }}">Cancel</a>
+</form>
+{% endblock %}

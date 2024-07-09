@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{%block title%} Case Note {%endblock%}
+{% block content %}
+<div class="container">
+    <h2>Create Case Note</h2>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.note.label(class="form-label") }}
+            {{ form.note(class="form-control", rows=5) }}
+        </div>
+        <div class="form-group">
+            {{ form.reference_date.label(class="form-label") }}
+            {{ form.reference_date(class="form-control", rows=5) }}
+        </div>
+        <div class="form-group">
+            <a href="{{ next or url_for('case_blp.get_cases') }}" class="btn btn-secondary">Cancel</a>
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+    </form>
+</div>
+{% endblock %}

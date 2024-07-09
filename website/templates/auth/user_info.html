@@ -21,6 +21,10 @@
         <p><strong>Creation Date:</strong> {{ user_info.creation_date }}</p>
         <p><strong>Last Login In Date:</strong> {{ user_info.last_login }}</p>
         <p><strong>Update Date:</strong> {{ user_info.update_date }}</p>
+        <p>Cases</p>
+        {% for case in user_info.assigned_cases%}
+        <p><a href="{{url_for('case_blp.get_case',id=case.id)}}">{{case.case_number}}</a></p>
+        {% endfor%}
     </div>
     <a class="btn" href="{{ url_for('auth_blp.all_users') }}">Back</a>
     <a class="btn" href="{{ url_for('auth_blp.edit_user', id=user_info.id) }}">Edit User</a>

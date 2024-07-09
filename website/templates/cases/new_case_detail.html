@@ -1,0 +1,45 @@
+{% block content %}
+<h2>Case Detail</h2>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        {{ form.judge_name.label(class="form-control-label") }}
+        {{ form.judge_name(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.court_type.label(class="form-control-label") }}
+        {{ form.court_type(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.court_description.label(class="form-control-label") }}
+        {{ form.court_description(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.court_location.label(class="form-control-label") }}
+        {{ form.court_location(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.case_hearing_date.label(class="form-control-label") }}
+        {{ form.case_hearing_date(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.case_judgment.label(class="form-control-label") }}
+        {{ form.case_judgment(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.case_outcome.label(class="form-control-label") }}
+        {{ form.case_outcome(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.assigned_prosecutor.label(class="form-control-label") }}
+        {{ form.assigned_prosecutor(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.evidence_details.label(class="form-control-label") }}
+        {{ form.evidence_details(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.submit(class="btn btn-primary") }}
+    </div>
+</form>
+{% endblock %}

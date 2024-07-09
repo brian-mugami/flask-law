@@ -31,11 +31,20 @@ class UserModel(db.Model, UserMixin):
     update_date = db.Column(db.DateTime)
     creation_date = db.Column(db.DateTime, default=datetime.utcnow())
     user_type = db.Column(
-        db.Enum("admin", "super_admin", "advocate", "associate", "intern", name="user_type"),
+        db.Enum("admin", "super_admin", "advocate", "associate", "intern", "lawyer", "client", "secretary",
+                name="user_type"),
         nullable=False)
     confirmation = db.relationship("ConfirmationModel", lazy="dynamic", back_populates="user",
                                    cascade="all, delete-orphan")
     clients = db.relationship("ClientModel", lazy="dynamic", back_populates="user")
+    user_notes = db.relationship("CaseNoteModel", lazy="dynamic", back_populates="user")
+    cases = db.relationship("CaseModel", lazy="dynamic", back_populates="user")
+    case_details = db.relationship("CaseDetailModel", lazy="dynamic", back_populates="user")
+    assigned_cases = db.relationship('CaseModel', secondary="case_attorneys", back_populates='attorneys')
+    attachments = db.relationship("CaseAttachmentModel", back_populates="user", lazy="dynamic")
+
+    def __repr__(self):
+        return f"{self.user_type}- {self.first_name} {self.last_name}"
 
     @classmethod
     def find_by_id(cls, _id) -> "UserModel":
@@ -69,7 +78,7 @@ class UserModel(db.Model, UserMixin):
     def find_by_phone_no(cls, phone_no) -> "UserModel":
         return cls.query.filter_by(phone_no=phone_no).first()
 
-    def send_email(self):
+    def send_email(self, ):
         subject = "Registration Confirmation"
         link = request.url_root[:-1] + url_for("auth_blp.confirmation",
                                                confirm_id=self.most_recent_confirmation.id)
