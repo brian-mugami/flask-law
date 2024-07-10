@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 {%block title%} Case Note {%endblock%}
+
 {% block content %}
 <div class="container">
     <h2>Create Case Note</h2>
+    {% if user.user_type != "client" %}
     <form method="POST">
         {{ form.hidden_tag() }}
         <div class="form-group">
@@ -18,5 +20,7 @@
             {{ form.submit(class="btn btn-primary") }}
         </div>
     </form>
+    {% endif %}
+
 </div>
 {% endblock %}

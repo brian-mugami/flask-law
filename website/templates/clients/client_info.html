@@ -19,8 +19,13 @@
 {% for case in client.cases%}
 <p><a href="{{url_for('case_blp.get_case',id=case.id)}}">{{case.case_number}}</a></p>
 {%endfor%}
+{% if user.user_type != "client" %}
 <a href="{{ url_for('client_blp.get_clients') }}">Back to all clients</a>
 <a class="btn" href="{{ url_for('client_blp.edit_client', id=client.id) }}">Edit Client</a>
 <a class="btn" href="{{ url_for('client_blp.new_client_account', id=client.id) }}">Create Client Account</a>
 <a class="btn" href="{{ url_for('case_blp.client_case', id=client.id) }}">Create Case</a>
+{% else %}
+<a href="{{ next }}">Back</a>
+{% endif %}
+
 {% endblock %}

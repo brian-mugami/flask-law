@@ -28,7 +28,8 @@
         {% for note in notes %}
         <li class="list-group-item">
             <div class="note-header">
-                <strong>Note by: <a href="{{url_for('auth_blp.user_info',id=note.user.id)}}">{{ note.user.email }}</a></strong>
+                <strong>Note by: <a href="{{url_for('auth_blp.user_info',id=note.user.id)}}">{{ note.user.email
+                    }}</a></strong>
                 <strong>Reference Date: {{ note.reference_date }}</strong>
             </div>
             <div class="note-body">
@@ -44,8 +45,10 @@
     <p>No notes available for this case.</p>
     {% endif %}
     <div class="form-group mt-3">
-        <a href="{{ url_for('case_blp.get_case', id=case.id) }}" class="btn btn-secondary">Back</a>
+        {% if user.user_type != "client" %}
         <a href="{{ url_for('case_blp.add_note', id=case.id) }}" class="btn btn-primary">Add Note</a>
+        {% endif %}
+        <a href="{{ url_for('case_blp.get_case', id=case.id) }}" class="btn btn-secondary">Back</a>
     </div>
 </div>
 <div align="center">

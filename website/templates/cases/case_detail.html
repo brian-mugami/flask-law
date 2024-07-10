@@ -47,6 +47,8 @@
         </tr>
     </table>
     <a href="{{ next or url_for('case_blp.get_cases') }}" class="btn btn-secondary">Back</a>
+    {% if user.user_type != "client" %}
     <a href="{{ url_for('case_blp.edit_case_detail', id=case_detail.id) }}" class="btn btn-danger">Edit</a>
+    {% endif %}
 </div>
 {% endblock %}

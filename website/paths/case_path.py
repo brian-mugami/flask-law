@@ -11,7 +11,7 @@ from werkzeug.utils import secure_filename
 from .. import UserModel
 from ..db import db
 from ..forms import CreateCaseForm, AttToCaseForm, CaseDetailForm, CaseNoteForm, AttachmentForm
-from ..models import CaseModel, CaseAttorneyModel, CaseDetailModel, CaseNoteModel, CaseAttachmentModel
+from ..models import CaseModel, CaseAttorneyModel, CaseDetailModel, CaseNoteModel, CaseAttachmentModel, ClientModel
 
 case_blp = Blueprint("case_blp", __name__, static_folder="static", template_folder="templates")
 ALLOWED_EXTENSIONS = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'xlsm']
@@ -29,6 +29,46 @@ CASE_UPDATED_SUCCESSFULLY = "Case updated successfully."
 CASE_UPDATE_FAILED = "Case update failed."
 ATTACHMENT_SUCCESS = "Attachment uploaded successfully."
 ATTACHMENT_FAIL = "Failed to upload attachment."""
+
+
+@case_blp.route("/mycase")
+@login_required
+def my_cases():
+    page = request.args.get("page", 1, type=int)
+    name_filter = request.args.get("nameFilter")
+    user = UserModel.find_by_id(current_user.id)
+    client = ClientModel.find_by_email(user.email)
+    base_query = CaseModel.query.filter_by(client_id=client.id).order_by(CaseModel.case_number,
+                                                                         CaseModel.date_created.desc())
+    if name_filter:
+        search_query = f"%{name_filter}%"
+        base_query = base_query.filter(
+            or_(
+                CaseModel.case_number.ilike(search_query),
+            )
+        )
+    cases = base_query.paginate(page=page, per_page=10)
+    return render_template("cases/cases.html", cases=cases, user=current_user)
+
+
+@case_blp.route("/clientcase")
+@login_required
+def client_cases():
+    page = request.args.get("page", 1, type=int)
+    name_filter = request.args.get("nameFilter")
+    user = UserModel.find_by_id(current_user.id)
+    client = ClientModel.find_by_email(user.email)
+    base_query = CaseModel.query.filter_by(client_id=client.id).order_by(CaseModel.case_number,
+                                                                         CaseModel.date_created.desc())
+    if name_filter:
+        search_query = f"%{name_filter}%"
+        base_query = base_query.filter(
+            or_(
+                CaseModel.case_number.ilike(search_query),
+            )
+        )
+    cases = base_query.paginate(page=page, per_page=10)
+    return render_template("cases/cases.html", cases=cases, user=current_user)
 
 
 @case_blp.route("/view/detail/<int:id>", methods=["POST", "GET"])

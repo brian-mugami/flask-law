@@ -34,13 +34,18 @@
     </div>
 </div>
 <a class="btn btn-primary" href="{{ next or url_for('case_blp.all_cases') }}">Back</a>
+{% if user.user_type != "client" %}
 <a class="btn btn-primary" href="{{url_for('case_blp.edit_case', id=case.id) }}">Edit Case</a>
 <a class="btn btn-warning" href="{{url_for('case_blp.assign_cases', id=case.id) }}">Add Attorney</a>
+{% endif %}
 <a class="btn btn-dark" href="{{url_for('case_blp.view_notes', id=case.id) }}">View Notes({{ count }})</a>
 <a class="btn btn-success" href="{{url_for('case_blp.view_attachments', id=case.id) }}">View Case Attachments</a>
+
 {% if case.case_details%}
 <a class="btn btn-secondary" href="{{url_for('case_blp.view_case_detail', id=case.id) }}">View Case Details</a>
 {% else%}
+{% if user.user_type != "client" %}
 <a class="btn btn-danger" href="{{url_for('case_blp.case_detail', id=case.id) }}">Add Case Details</a>
+{% endif %}
 {%endif%}
 {% endblock %}

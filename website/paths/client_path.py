@@ -57,7 +57,7 @@ def get_client(id):
     client = ClientModel.find_by_id(id)
     if not client:
         flash(CLIENT_NOT_FOUND, category="error")
-    return render_template("clients/client_info.html", client=client, user=current_user)
+    return render_template("clients/client_info.html", client=client, user=current_user,next=request.referrer)
 
 
 @client_blp.route("edit/<int:id>", methods=["POST", "GET"])

@@ -53,32 +53,29 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 {% if user.is_authenticated %}
+                {% if user.user_type == "client"%}
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ url_for('case_blp.client_cases') }}">My Cases</a>
+                </li>
+                <a href="{{url_for('auth_blp.logout')}}">
+                    <button class="btn btn-danger">Logout</button>
+                </a>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ url_for('case_blp.all_cases') }}">My Cases</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="{{ url_for('client_blp.get_clients') }}">Client
                         Management</a>
                 </li>
+                {% if user.user_type == "super_admin" %}
                 <li class="nav-item">
                     <a class="nav-link active" href="{{ url_for('auth_blp.all_users') }}">User Management</a>
                 </li>
+                {% endif %}
+
                 <li class="nav-item">
                     <a class="nav-link active" href="{{ url_for('case_blp.all_cases') }}">Case Management</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link active dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                       aria-expanded="false">
-                        Dropdown
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" aria-disabled="true">Disabled</a>
                 </li>
             </ul>
             <a href="{{url_for('auth_blp.logout')}}">
@@ -88,6 +85,7 @@
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn btn-dark btn-outline-success" type="submit">Search</button>
             </form>
+            {% endif %}
             {%else%}
             <ul>
                 <li class="nav-item">

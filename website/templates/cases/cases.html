@@ -24,9 +24,11 @@
         </form>
     </div>
 </div>
+{% if user.user_type != "client" %}
 <a href="{{ url_for('case_blp.new_case') }}">
     <button>New Case</button>
 </a>
+{% endif %}
 <div class="container-fluid card ">
     <table class="table ">
         <thead>

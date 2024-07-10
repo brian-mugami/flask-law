@@ -54,8 +54,11 @@
 {% else %}
 <p>No attachments found for this case.</p>
 {% endif %}
-<a class="btn btn-primary" href="{{ url_for('case_blp.get_case', id=case.id) }}">Back to Case Details</a>
+{% if user.user_type != "client" %}
 <a class="btn btn-success" href="{{url_for('case_blp.case_attachment', id=case.id) }}">Add Attachment</a>
+{% endif %}
+<a class="btn btn-primary" href="{{ url_for('case_blp.get_case', id=case.id) }}">Back to Case Details</a>
+
 <div align="center">
     {% if attachments.has_prev %}
     <a class="btn btn-outline-info btn-sm mt-3"

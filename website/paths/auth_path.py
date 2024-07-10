@@ -287,7 +287,7 @@ def user_info(id):
     user = UserModel.find_by_id(id)
     if not user:
         flash(USER_NOT_FOUND, category="error")
-    return render_template("auth/user_info.html", user_info=user, user=current_user)
+    return render_template("auth/user_info.html", user_info=user, user=current_user, next=request.referrer)
 
 
 @auth_blp.route("/reset-password", methods=["POST", "GET"])
