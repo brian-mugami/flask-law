@@ -10,8 +10,9 @@ from werkzeug.utils import secure_filename
 
 from .. import UserModel
 from ..db import db
-from ..forms import CreateCaseForm, AttToCaseForm, CaseDetailForm, CaseNoteForm, AttachmentForm
-from ..models import CaseModel, CaseAttorneyModel, CaseDetailModel, CaseNoteModel, CaseAttachmentModel, ClientModel
+from ..forms import CreateCaseForm, AttToCaseForm, CaseDetailForm, CaseNoteForm, AttachmentForm, CourtHearingForm
+from ..models import CaseModel, CaseAttorneyModel, CaseDetailModel, CaseNoteModel, CaseAttachmentModel, ClientModel, \
+    CaseHearingModel
 
 case_blp = Blueprint("case_blp", __name__, static_folder="static", template_folder="templates")
 ALLOWED_EXTENSIONS = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'xlsm']
@@ -29,6 +30,75 @@ CASE_UPDATED_SUCCESSFULLY = "Case updated successfully."
 CASE_UPDATE_FAILED = "Case update failed."
 ATTACHMENT_SUCCESS = "Attachment uploaded successfully."
 ATTACHMENT_FAIL = "Failed to upload attachment."""
+HEARING_SUCCESS = "Hearing added successfully"
+HEARING_FAIL = "Hearing update failed"
+
+
+@case_blp.route("/edit_hearing/<int:hearing_id>", methods=["POST", "GET"])
+@login_required
+def edit_hearing(hearing_id):
+    hearing = CaseHearingModel.find_by_id(hearing_id)
+    case = CaseModel.find_by_id(hearing.case_id)
+    form = CourtHearingForm(obj=hearing)
+    if request.method == "POST":
+        hearing.hearing_date = form.hearing_date.data
+        hearing.next_hearing_date = form.next_hearing_date.data
+        hearing.description = form.description.data
+        hearing.details = form.details.data
+        try:
+            hearing.update_db()
+            if form.next_hearing_date.data:
+                case.court_date = form.next_hearing_date.data
+                case.update_db()
+            flash(HEARING_SUCCESS, "success")
+            return redirect(url_for('case_blp.view_hearings', case_id=case.id))
+        except Exception as e:
+            traceback.print_exc()
+            flash(HEARING_FAIL, category="error")
+            db.session.rollback()
+    return render_template("cases/add_hearing.html", form=form, case_id=hearing.case_id, case=case, user=current_user)
+
+
+@case_blp.route("/case/<int:case_id>/hearings", methods=["GET"])
+@login_required
+def view_hearings(case_id):
+    case = CaseModel.find_by_id(case_id)
+    if not case:
+        flash(CASE_NOT_FOUND, "error")
+        return redirect(url_for('case_blp.all_cases'))
+
+    hearings = CaseHearingModel.query.filter_by(case_id=case_id).order_by(CaseHearingModel.hearing_date).all()
+    return render_template("cases/view_hearings.html", case=case, hearings=hearings, user=current_user)
+
+
+@case_blp.route("/add_hearing/<int:case_id>", methods=["POST", "GET"])
+@login_required
+def add_hearing(case_id):
+    if not current_user.is_authenticated:
+        return redirect(url_for('auth_blp.login'))
+    form = CourtHearingForm()
+    case = CaseModel.find_by_id(case_id)
+    if request.method == "POST":
+        hearing = CaseHearingModel(
+            case_id=case_id,
+            hearing_date=form.hearing_date.data,
+            next_hearing_date=form.next_hearing_date.data,
+            description=form.description.data,
+            details=form.details.data,
+            user_id=current_user.id
+        )
+        try:
+            hearing.save_to_db()
+            if form.next_hearing_date.data:
+                case.court_date = form.next_hearing_date.data
+                case.update_db()
+            flash(HEARING_SUCCESS, "success")
+            return redirect(url_for('case_blp.view_hearings', case_id=case_id))
+        except Exception as e:
+            traceback.print_exc()
+            flash(HEARING_FAIL, category="error")
+            db.session.rollback()
+    return render_template("cases/add_hearing.html", form=form, case_id=case_id, user=current_user, case=case)
 
 
 @case_blp.route("/mycase")
@@ -36,10 +106,9 @@ ATTACHMENT_FAIL = "Failed to upload attachment."""
 def my_cases():
     page = request.args.get("page", 1, type=int)
     name_filter = request.args.get("nameFilter")
-    user = UserModel.find_by_id(current_user.id)
-    client = ClientModel.find_by_email(user.email)
-    base_query = CaseModel.query.filter_by(client_id=client.id).order_by(CaseModel.case_number,
-                                                                         CaseModel.date_created.desc())
+    base_query = CaseModel.query.join(CaseModel.attorneys).filter(UserModel.id == current_user.id).order_by(
+        CaseModel.case_number, CaseModel.date_created.desc())
+
     if name_filter:
         search_query = f"%{name_filter}%"
         base_query = base_query.filter(
@@ -92,7 +161,6 @@ def edit_case_detail(id):
         case_detail.court_type = form.court_type.data
         case_detail.court_description = form.court_description.data
         case_detail.court_location = form.court_location.data
-        case_detail.case_hearing_date = form.case_hearing_date.data
         case_detail.case_judgment = form.case_judgment.data
         case_detail.case_outcome = form.case_outcome.data
         case_detail.assigned_prosecutor = form.assigned_prosecutor.data
@@ -126,7 +194,6 @@ def case_detail(id):
             court_type=form.court_type.data,
             court_description=form.court_description.data,
             court_location=form.court_location.data,
-            case_hearing_date=form.case_hearing_date.data,
             case_judgment=form.case_judgment.data,
             case_outcome=form.case_outcome.data,
             assigned_prosecutor=form.assigned_prosecutor.data,

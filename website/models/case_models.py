@@ -32,6 +32,8 @@ class CaseModel(db.Model):
     attorneys = db.relationship('UserModel', secondary="case_attorneys", back_populates='assigned_cases')
     attachments = db.relationship("CaseAttachmentModel", back_populates="case", lazy="dynamic",
                                   cascade="all, delete-orphan")
+    court_hearings = db.relationship('CaseHearingModel', back_populates='case', lazy='dynamic',
+                                     cascade='all, delete-orphan')
 
     def save_to_db(self):
         db.session.add(self)
@@ -54,6 +56,65 @@ class CaseModel(db.Model):
         return cls.query.filter_by(case_number=case_number).first()
 
 
+class CaseAttorneyModel(db.Model):
+    __tablename__ = "case_attorneys"
+
+    id = db.Column(db.Integer, primary_key=True)
+    case_id = db.Column(db.Integer, db.ForeignKey('cases.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
+    __table_args__ = (
+        db.UniqueConstraint('case_id', 'user_id', ),
+    )
+
+    @classmethod
+    def find_by_ids(cls, user_id, case_id):
+        return cls.query.filter_by(user_id=user_id, case_id=case_id).first()
+
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete_from_db(self):
+        db.session.delete(self)
+        db.session.commit()
+
+
+class CaseHearingModel(db.Model):
+    __tablename__ = "case_hearing"
+    id = db.Column(db.Integer, primary_key=True)
+    hearing_date = db.Column(db.DateTime, nullable=False)
+    next_hearing_date = db.Column(db.DateTime, nullable=True)
+    description = db.Column(db.String(200), nullable=True)
+    details = db.Column(db.Text, nullable=False)
+    date_created = db.Column(db.DateTime, default=datetime.utcnow)
+    last_updated = db.Column(db.DateTime, onupdate=datetime.utcnow)
+    case_id = db.Column(db.Integer, db.ForeignKey('cases.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    case = db.relationship('CaseModel', back_populates='court_hearings')
+    user = db.relationship("UserModel", back_populates="court_hearings")
+
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete_from_db(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def update_db(self):
+        self.last_updated = datetime.utcnow()
+        db.session.commit()
+
+    @classmethod
+    def find_by_id(cls, id):
+        return cls.query.get(id)
+
+    @classmethod
+    def find_by_case_id_number(cls, case_id):
+        return cls.query.filter_by(case_id=case_id).order_by(cls.hearing_date)
+
+
 class CaseDetailModel(db.Model):
     __tablename__ = "case_details"
     id = db.Column(db.Integer, primary_key=True)
@@ -64,7 +125,6 @@ class CaseDetailModel(db.Model):
                 'courts martial', 'tribunal', name='court_types'), nullable=False)
     court_location = db.Column(db.String(200), nullable=True)
     court_description = db.Column(db.String(200), nullable=True)
-    case_hearing_date = db.Column(db.Date, nullable=True)
     case_judgment = db.Column(db.Text, nullable=True)
     case_outcome = db.Column(db.String(120), nullable=True)
     assigned_prosecutor = db.Column(db.String(120), nullable=True)
@@ -158,7 +218,6 @@ class CaseAttachmentModel(db.Model):
         self.last_updated = datetime.utcnow()
         db.session.commit()
 
-
     @classmethod
     def find_by_case_id(cls, id):
         return cls.query.filter_by(case_id=id).order_by(cls.uploaded_at.desc())
@@ -166,27 +225,3 @@ class CaseAttachmentModel(db.Model):
     @classmethod
     def find_by_id(cls, id):
         return cls.query.get(id)
-
-
-class CaseAttorneyModel(db.Model):
-    __tablename__ = "case_attorneys"
-
-    id = db.Column(db.Integer, primary_key=True)
-    case_id = db.Column(db.Integer, db.ForeignKey('cases.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-
-    __table_args__ = (
-        db.UniqueConstraint('case_id', 'user_id', ),
-    )
-
-    @classmethod
-    def find_by_ids(cls, user_id, case_id):
-        return cls.query.filter_by(user_id=user_id, case_id=case_id).first()
-
-    def save_to_db(self):
-        db.session.add(self)
-        db.session.commit()
-
-    def delete_from_db(self):
-        db.session.delete(self)
-        db.session.commit()

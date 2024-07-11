@@ -40,6 +40,7 @@
 {% endif %}
 <a class="btn btn-dark" href="{{url_for('case_blp.view_notes', id=case.id) }}">View Notes({{ count }})</a>
 <a class="btn btn-success" href="{{url_for('case_blp.view_attachments', id=case.id) }}">View Case Attachments</a>
+<a class="btn btn-success" href="{{url_for('case_blp.view_hearings', case_id=case.id) }}">View Hearings</a>
 
 {% if case.case_details%}
 <a class="btn btn-secondary" href="{{url_for('case_blp.view_case_detail', id=case.id) }}">View Case Details</a>

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Hearings for Case {{ case.case_number }}{% endblock %}
+{% block content %}
+<h2>Hearings for Case {{ case.case_number }}</h2>
+{% if hearings %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Hearing Date</th>
+            <th>Next Hearing Date</th>
+            <th>Description</th>
+            <th>Details</th>
+            <th>Uploaded By</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for hearing in hearings %}
+        <tr>
+            <td>{{ hearing.hearing_date.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+            <td>{{ hearing.next_hearing_date.strftime('%Y-%m-%d %H:%M:%S') if hearing.next_hearing_date else 'N/A' }}</td>
+            <td>{{ hearing.description }}</td>
+            <td>{{ hearing.details }}</td>
+            <td>{{ hearing.user.first_name }} {{ hearing.user.last_name }}</td>
+            <td>
+                <a href="{{ url_for('case_blp.edit_hearing', hearing_id=hearing.id) }}" class="btn btn-warning btn-sm">Edit</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No hearings found for this case.</p>
+{% endif %}
+<a class="btn btn-primary" href="{{ url_for('case_blp.get_case', id=case.id) }}">Back to Case Details</a>
+<a class="btn btn-success" href="{{ url_for('case_blp.add_hearing', case_id=case.id) }}">Add Hearing</a>
+{% endblock %}

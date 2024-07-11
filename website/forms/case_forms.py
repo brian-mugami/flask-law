@@ -2,9 +2,9 @@ from datetime import datetime
 
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
-from wtforms import StringField, TextAreaField, SelectField, DateField, SubmitField
+from wtforms import StringField, TextAreaField, SelectField, DateField, SubmitField, DateTimeLocalField
 from wtforms import widgets
-from wtforms.validators import DataRequired, Length, Optional
+from wtforms.validators import DataRequired, Length, Optional, ValidationError
 from wtforms_alchemy import QuerySelectField, QuerySelectMultipleField
 
 from website import UserModel
@@ -22,6 +22,19 @@ def non_client_users():
 def active_clients():
     from website.models import ClientModel
     return ClientModel.query.filter_by(is_active=True).order_by(ClientModel.first_name)
+
+
+class CourtHearingForm(FlaskForm):
+    hearing_date = DateTimeLocalField('Hearing Date', validators=[DataRequired()])
+    next_hearing_date = DateTimeLocalField('Next Hearing Date')
+    description = StringField('Description')
+    details = TextAreaField('Details', validators=[DataRequired()])
+    submit = SubmitField('Save Hearing')
+
+    def validate_next_hearing_date(self, next_hearing_date):
+        if next_hearing_date.data and self.hearing_date.data:
+            if next_hearing_date.data <= self.hearing_date.data:
+                raise ValidationError('Next hearing date must be after the hearing date.')
 
 
 class CreateCaseForm(FlaskForm):
@@ -63,7 +76,6 @@ class CaseDetailForm(FlaskForm):
     ], validators=[DataRequired()])
     court_location = StringField('Court Location', validators=[Optional()])
     court_description = StringField('Court Description', validators=[Optional()])
-    case_hearing_date = DateField('Case Hearing Date', format='%Y-%m-%d', validators=[Optional()])
     case_judgment = TextAreaField('Case Judgment', validators=[Optional()])
     case_outcome = StringField('Case Outcome', validators=[Optional()])
     assigned_prosecutor = StringField('Assigned Prosecutor', validators=[Optional()])
@@ -80,5 +92,6 @@ class CaseNoteForm(FlaskForm):
 
 class AttachmentForm(FlaskForm):
     description = StringField("Attachment Description", validators=[DataRequired()])
-    file = FileField('File', validators=[FileRequired(),FileAllowed(['pdf', 'doc', 'docx', 'xls', 'xlsx'], 'PDF, Word, and Excel files only!')])
+    file = FileField('File', validators=[FileRequired(), FileAllowed(['pdf', 'doc', 'docx', 'xls', 'xlsx'],
+                                                                     'PDF, Word, and Excel files only!')])
     submit = SubmitField('Upload')

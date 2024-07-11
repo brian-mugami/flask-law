@@ -45,7 +45,7 @@
 <body>
 <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="{{url_for('home_blp.home_page')}}">Navbar</a>
+        <a class="navbar-brand" href="{{url_for('home_blp.home_page')}}">Home</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -57,12 +57,12 @@
                 <li class="nav-item">
                     <a class="nav-link active" href="{{ url_for('case_blp.client_cases') }}">My Cases</a>
                 </li>
-                <a href="{{url_for('auth_blp.logout')}}">
-                    <button class="btn btn-danger">Logout</button>
-                </a>
+                <button class="btn btn-danger"><a href="{{url_for('auth_blp.logout')}}">
+                    Logout
+                </a></button>
                 {% else %}
                 <li class="nav-item">
-                    <a class="nav-link active" href="{{ url_for('case_blp.all_cases') }}">My Cases</a>
+                    <a class="nav-link active" href="{{ url_for('case_blp.my_cases') }}">My Cases</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="{{ url_for('client_blp.get_clients') }}">Client
@@ -72,19 +72,17 @@
                 <li class="nav-item">
                     <a class="nav-link active" href="{{ url_for('auth_blp.all_users') }}">User Management</a>
                 </li>
-                {% endif %}
-
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ url_for('case_blp.all_cases') }}">All Cases</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="{{ url_for('case_blp.all_cases') }}">Case Management</a>
                 </li>
             </ul>
+            {% endif %}
             <a href="{{url_for('auth_blp.logout')}}">
                 <button class="btn btn-danger">Logout</button>
             </a>
-            <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-dark btn-outline-success" type="submit">Search</button>
-            </form>
             {% endif %}
             {%else%}
             <ul>
