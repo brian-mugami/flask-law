@@ -22,7 +22,11 @@
 {% if user.user_type != "client" %}
 <a href="{{ url_for('client_blp.get_clients') }}">Back to all clients</a>
 <a class="btn" href="{{ url_for('client_blp.edit_client', id=client.id) }}">Edit Client</a>
+{% if not client_account%}
 <a class="btn" href="{{ url_for('client_blp.new_client_account', id=client.id) }}">Create Client Account</a>
+{% else %}
+This Client has an account
+{% endif %}
 <a class="btn" href="{{ url_for('case_blp.client_case', id=client.id) }}">Create Case</a>
 {% else %}
 <a href="{{ next }}">Back</a>

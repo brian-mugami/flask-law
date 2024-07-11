@@ -53,44 +53,43 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 {% if user.is_authenticated %}
-                {% if user.user_type == "client"%}
-                <li class="nav-item">
-                    <a class="nav-link active" href="{{ url_for('case_blp.client_cases') }}">My Cases</a>
-                </li>
-                <button class="btn btn-danger"><a href="{{url_for('auth_blp.logout')}}">
-                    Logout
-                </a></button>
+                    {% if user.user_type == "client" %}
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ url_for('case_blp.client_cases') }}">My Cases</a>
+                        </li>
+                    {% elif user.user_type != "client" and user.user_type != "super_admin" %}
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ url_for('case_blp.my_cases') }}">My Cases</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ url_for('client_blp.get_clients') }}">Client Management</a>
+                        </li>
+                    {% elif user.user_type == "super_admin" %}
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ url_for('case_blp.my_cases') }}">My Cases</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ url_for('auth_blp.all_users') }}">User Management</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ url_for('case_blp.all_cases') }}">Case Management</a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+            </ul>
+            <ul class="navbar-nav mb-2 mb-lg-0">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a href="{{ url_for('auth_blp.logout') }}">
+                            <button class="btn btn-danger">Logout</button>
+                        </a>
+                    </li>
                 {% else %}
-                <li class="nav-item">
-                    <a class="nav-link active" href="{{ url_for('case_blp.my_cases') }}">My Cases</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{{ url_for('client_blp.get_clients') }}">Client
-                        Management</a>
-                </li>
-                {% if user.user_type == "super_admin" %}
-                <li class="nav-item">
-                    <a class="nav-link active" href="{{ url_for('auth_blp.all_users') }}">User Management</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="{{ url_for('case_blp.all_cases') }}">All Cases</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="{{ url_for('case_blp.all_cases') }}">Case Management</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ url_for('auth_blp.login') }}">Login</a>
+                    </li>
+                {% endif %}
             </ul>
-            {% endif %}
-            <a href="{{url_for('auth_blp.logout')}}">
-                <button class="btn btn-danger">Logout</button>
-            </a>
-            {% endif %}
-            {%else%}
-            <ul>
-                <li class="nav-item">
-                    <a class="nav-link active" href="{{ url_for('auth_blp.login') }}">Login</a>
-                </li>
-            </ul>
-            {%endif%}
         </div>
     </div>
 </nav>

@@ -66,8 +66,19 @@ def view_hearings(case_id):
     if not case:
         flash(CASE_NOT_FOUND, "error")
         return redirect(url_for('case_blp.all_cases'))
+    page = request.args.get("page", 1, type=int)
+    start_date = request.args.get('start_date')
+    end_date = request.args.get('end_date')
 
-    hearings = CaseHearingModel.query.filter_by(case_id=case_id).order_by(CaseHearingModel.hearing_date).all()
+    query = CaseHearingModel.query.filter_by(case_id=case_id).order_by(CaseHearingModel.hearing_date)
+
+    if start_date and end_date:
+        if start_date > end_date:
+            flash("Start date cannot be after end date.", "error")
+        else:
+            query = query.filter(CaseHearingModel.hearing_date.between(start_date, end_date))
+
+    hearings = query.paginate(page=page,per_page=10)
     return render_template("cases/view_hearings.html", case=case, hearings=hearings, user=current_user)
 
 

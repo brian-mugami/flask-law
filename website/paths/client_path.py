@@ -57,7 +57,9 @@ def get_client(id):
     client = ClientModel.find_by_id(id)
     if not client:
         flash(CLIENT_NOT_FOUND, category="error")
-    return render_template("clients/client_info.html", client=client, user=current_user,next=request.referrer)
+    client_account = UserModel.find_by_email(client.email)
+    return render_template("clients/client_info.html", client=client, user=current_user, next=request.referrer,
+                           client_account=client_account)
 
 
 @client_blp.route("edit/<int:id>", methods=["POST", "GET"])
@@ -168,4 +170,5 @@ def new_client_account(id):
             user.delete_from_db()
             traceback.print_exc()
             flash(SERVER_ERROR, category="error")
-    return render_template("clients/new_client_account.html", user=current_user, form=form, next=request.referrer, client=client)
+    return render_template("clients/new_client_account.html", user=current_user, form=form, next=request.referrer,
+                           client=client)
