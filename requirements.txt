@@ -13,3 +13,4 @@ flask-reuploaded
 email-validator
 flask-babel
 wtforms_alchemy
+gunicorn
