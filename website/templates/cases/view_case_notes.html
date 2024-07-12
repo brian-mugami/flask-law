@@ -46,9 +46,9 @@
     {% endif %}
     <div class="form-group mt-3">
         {% if user.user_type != "client" %}
-        <a href="{{ url_for('case_blp.add_note', id=case.id) }}" class="btn btn-primary">Add Note</a>
+        <a class="btn btn-primary" href="{{ url_for('case_blp.add_note', id=case.id) }}">Add Note</a>
         {% endif %}
-        <a href="{{ url_for('case_blp.get_case', id=case.id) }}" class="btn btn-secondary">Back</a>
+        <a class="btn btn-secondary" href="{{ url_for('case_blp.get_case', id=case.id) }}">Back</a>
     </div>
 </div>
 <div align="center">

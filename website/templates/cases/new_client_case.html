@@ -37,7 +37,7 @@
     <div class="form-group">
         {{ form.priority.label }} {{ form.priority(class="form-control") }}
     </div>
-    <button type="submit" class="btn btn-primary">Create Case</button>
+    <button class="btn btn-primary" type="submit">Create Case</button>
     <a class="btn btn-secondary" href="{{ next or url_for('client_blp.get_cases') }}">Cancel</a>
 </form>
 {% endblock %}

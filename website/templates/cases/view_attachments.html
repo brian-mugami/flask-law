@@ -30,17 +30,17 @@
         <p class="card-text">Description: {{ attachment.description }}</p>
 
         {% if attachment.file_url.endswith('.pdf') %}
-        <embed src="{{ url_for('static', filename='attachments/' + case.case_number + '/' + attachment.attachment_filename) }}"
-               type="application/pdf" width="400px" height="200px">
+        <embed height="200px"
+               src="{{ url_for('static', filename='attachments/' + case.case_number + '/' + attachment.attachment_filename) }}" type="application/pdf" width="400px">
         <a class="btn btn-primary mt-2"
            href="{{ url_for('static', filename='attachments/' + case.case_number + '/' + attachment.attachment_filename) }}"
-           target="_blank"
-           rel="noopener noreferrer">View PDF</a>
+           rel="noopener noreferrer"
+           target="_blank">View PDF</a>
         {% else %}
         <a class="btn btn-primary mt-2"
            href="{{ url_for('static', filename='attachments/' + case.case_number + '/' + attachment.attachment_filename) }}"
-           target="_blank"
-           rel="noopener noreferrer">Download</a>
+           rel="noopener noreferrer"
+           target="_blank">Download</a>
         {% endif %}
         {% if attachment.user_id == user.id%}
         <a class="btn btn-warning mt-2" href="{{ url_for('case_blp.edit_attachment', id=attachment.id) }}">Edit</a>

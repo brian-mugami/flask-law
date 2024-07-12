@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Create Client Account</h2>
-  <form method="POST">
+<h2>Create Client Account</h2>
+<form method="POST">
     {{ form.hidden_tag() }}
     {{ form.first_name.label }} {{ form.first_name() }}
     {{ form.last_name.label }} {{ form.last_name() }}
@@ -11,6 +11,6 @@
     {{ form.password.label }} {{ form.password() }}
     {{ form.confirm_password.label }} {{ form.confirm_password() }}
     {{ form.submit() }}
-  </form>
-  <a class="btn" href="{{ url_for('client_blp.get_client', id=client.id) }}">Cancel</a>
+</form>
+<a class="btn" href="{{ url_for('client_blp.get_client', id=client.id) }}">Cancel</a>
 {% endblock %}

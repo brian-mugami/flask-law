@@ -15,7 +15,7 @@ login_manager = LoginManager()
 
 def create_app():
     app = Flask(__name__, template_folder="templates", static_folder="static")
-    app.config.from_pyfile("default_config.py")
+    app.config.from_pyfile("config.py")
     db.init_app(app)
 
     migrate.init_app(app=app, db=db)

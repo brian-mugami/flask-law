@@ -42,7 +42,7 @@ class UserModel(db.Model, UserMixin):
     case_details = db.relationship("CaseDetailModel", lazy="dynamic", back_populates="user")
     assigned_cases = db.relationship('CaseModel', secondary="case_attorneys", back_populates='attorneys')
     attachments = db.relationship("CaseAttachmentModel", back_populates="user", lazy="dynamic")
-    court_hearings = db.relationship('CaseHearingModel', back_populates='user', lazy='dynamic',)
+    court_hearings = db.relationship('CaseHearingModel', back_populates='user', lazy='dynamic', )
 
     def __repr__(self):
         return f"{self.user_type}- {self.first_name} {self.last_name}"

@@ -13,7 +13,8 @@ class CreateClientForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email(), Length(max=80)])
     phone_no = StringField('Phone Number', validators=[DataRequired(), Length(min=10, max=20)])
     address = StringField('Address', validators=[DataRequired(), Length(max=200)])
-    identification_no = StringField('Identification Number/Passport Number', validators=[DataRequired(), Length(max=200)])
+    identification_no = StringField('Identification Number/Passport Number',
+                                    validators=[DataRequired(), Length(max=200)])
     is_active = BooleanField("Is Active", default=True)
     is_archived = BooleanField("Is Archived", default=False)
     client_date = DateField("Client Date", default=datetime.utcnow())

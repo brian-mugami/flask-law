@@ -2,16 +2,16 @@
 {% block title %}Hearings for Case {{ case.case_number }}{% endblock %}
 {% block content %}
 <h2>Hearings for Case {{ case.case_number }}</h2>
-<form method="get" action="{{ url_for('case_blp.view_hearings', case_id=case.id) }}">
+<form action="{{ url_for('case_blp.view_hearings', case_id=case.id) }}" method="get">
     <div class="form-group">
         <label for="start_date">Start Date</label>
-        <input type="date" class="form-control" id="start_date" name="start_date" value="{{ start_date }}">
+        <input class="form-control" id="start_date" name="start_date" type="date" value="{{ start_date }}">
     </div>
     <div class="form-group">
         <label for="end_date">End Date</label>
-        <input type="date" class="form-control" id="end_date" name="end_date" value="{{ end_date }}">
+        <input class="form-control" id="end_date" name="end_date" type="date" value="{{ end_date }}">
     </div>
-    <button type="submit" class="btn btn-primary">Filter</button>
+    <button class="btn btn-primary" type="submit">Filter</button>
 </form>
 {% if hearings %}
 <table class="table">
@@ -34,8 +34,8 @@
         <td>{{ hearing.details }}</td>
         <td>{{ hearing.user.first_name }} {{ hearing.user.last_name }}</td>
         <td>
-            <a href="{{ url_for('case_blp.edit_hearing', hearing_id=hearing.id) }}"
-               class="btn btn-warning btn-sm">Edit</a>
+            <a class="btn btn-warning btn-sm"
+               href="{{ url_for('case_blp.edit_hearing', hearing_id=hearing.id) }}">Edit</a>
         </td>
     </tr>
     {% endfor %}

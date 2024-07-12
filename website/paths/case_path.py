@@ -78,7 +78,7 @@ def view_hearings(case_id):
         else:
             query = query.filter(CaseHearingModel.hearing_date.between(start_date, end_date))
 
-    hearings = query.paginate(page=page,per_page=10)
+    hearings = query.paginate(page=page, per_page=10)
     return render_template("cases/view_hearings.html", case=case, hearings=hearings, user=current_user)
 
 

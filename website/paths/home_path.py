@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for
 from flask_login import current_user, login_required
 
 from website import UserModel
-from website.models import CaseModel, CaseAttorneyModel,ClientModel
+from website.models import CaseModel, CaseAttorneyModel, ClientModel
 
 home_blp = Blueprint("home_blp", __name__, )
 

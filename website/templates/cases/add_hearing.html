@@ -2,7 +2,7 @@
 {% block title %}Add Hearing for Case {{ case.case_number }}{% endblock %}
 {% block content %}
 <h2>Add Hearing for Case {{ case.case_number }}</h2>
-<form method="POST" action="">
+<form action="" method="POST">
     {{ form.hidden_tag() }}
     <div class="form-group">
         {{ form.hearing_date.label }}
@@ -32,7 +32,7 @@
         <div class="alert alert-danger">{{ form.details.errors[0] }}</div>
         {% endif %}
     </div>
-    <button type="submit" class="btn btn-primary">{{ form.submit.label }}</button>
+    <button class="btn btn-primary" type="submit">{{ form.submit.label }}</button>
 </form>
 <a class="btn btn-primary" href="{{ url_for('case_blp.view_hearings', case_id=case.id) }}">Back to Hearings</a>
 {% endblock %}

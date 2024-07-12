@@ -21,7 +21,7 @@ class RegistrationForm(FlaskForm):
                             choices=[('admin', 'Admin'), ('super_admin', 'Super Admin'),
                                      ('advocate', 'Advocate'), ('associate', 'Associate'), ('secretary', 'Secretary'),
                                      ('intern', 'Intern'),
-                                     ('lawyer', 'Lawyer'),('client', 'Client'),],
+                                     ('lawyer', 'Lawyer'), ('client', 'Client'), ],
                             validators=[DataRequired()])
     image = FileField('User Image',
                       validators=[FileAllowed(['jpg', 'png', 'jpeg'], 'Images Only Please')])

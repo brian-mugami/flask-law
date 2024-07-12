@@ -2,7 +2,7 @@
 {% block title %}Edit Case{% endblock %}
 {% block content %}
 <h2>Edit Case</h2>
-<form method="POST" action="{{ url_for('case_blp.edit_case', id=case.id) }}">
+<form action="{{ url_for('case_blp.edit_case', id=case.id) }}" method="POST">
     {{ form.hidden_tag() }}
     <div class="form-group">
         {{ form.case_number.label(class="form-label") }}
