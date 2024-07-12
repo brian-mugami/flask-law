@@ -20,6 +20,7 @@
         <div class="form-group">
             {{ form.password.label }} {{ form.password(class="form-control") }}
         </div>
+        {% if user.user_type == "super_admin" %}
         <div class="form-group">
             {{ form.user_type.label }} {{ form.user_type(class="form-control") }}
         </div>
@@ -29,6 +30,8 @@
         <div class="form-group">
             {{ form.is_active.label }} {{ form.is_active(class="form-check-input") }}
         </div>
+        {% endif %}
+
         <div class="form-group">
             {{ form.image.label }} {{ form.image(class="form-control") }}
         </div>

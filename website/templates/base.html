@@ -86,7 +86,7 @@
                         <img src="{{ url_for('static', filename='uploads/'+ user.image) }}" class="rounded-circle"
                              style="width: 24px; height: 24px; object-fit: cover;" alt="Profile Pic">
                         {% else %}
-                        <img src="{{ url_for('static', filename='uploads/'+ default.jpeg) }}"
+                        <img src="{{ url_for('static', filename='uploads/'+ 'default.jpeg') }}"
                              class="rounded-circle" style="width: 24px; height: 24px; object-fit: cover;"
                              alt="Default Pic">
                         {% endif %}
@@ -95,7 +95,7 @@
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li>
                             <a class="dropdown-item"
-                               href="#">Profile</a>
+                               href="{{url_for('auth_blp.user_info',id=user.id)}}">Profile</a>
                         </li>
                         <li>
                             <hr class="dropdown-divider">

@@ -23,7 +23,7 @@ def create_app():
     login_manager.init_app(app)
     configure_uploads(app, photos)
     configure_uploads(app, attachments)
-    login_manager.login_view = 'auth.login'
+    login_manager.login_view = 'auth_blp.login'
 
     @login_manager.user_loader
     def load_user(id):

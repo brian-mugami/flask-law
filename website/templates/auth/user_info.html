@@ -9,7 +9,9 @@
         <p><strong>Last Name:</strong> {{ user_info.last_name }}</p>
         <p><strong>Email:</strong> {{ user_info.email }}</p>
         <p><strong>Phone Number:</strong> {{ user_info.phone_no }}</p>
+
         <p><strong>User Type:</strong> {{ user_info.user_type }}</p>
+
         <p><strong>User Status:</strong> {{ 'Active' if user_info.is_active else 'Inactive' }}</p>
         <p><strong>Date Registered:</strong> {{ user_info.date_registered.strftime('%Y-%m-%d %H:%M:%S') }}</p>
         {% if user_info.image %}
@@ -21,7 +23,7 @@
         <p><strong>Creation Date:</strong> {{ user_info.creation_date }}</p>
         <p><strong>Last Login In Date:</strong> {{ user_info.last_login }}</p>
         <p><strong>Update Date:</strong> {{ user_info.update_date }}</p>
-        {% if user.user_type != "client" %}
+        {% if user.user_type == "super_admin" or  user.id == user_info.id %}
         <p>Cases</p>
         {% for case in user_info.assigned_cases%}
         <p><a href="{{url_for('case_blp.get_case',id=case.id)}}">{{case.case_number}}</a></p>

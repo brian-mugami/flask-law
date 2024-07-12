@@ -182,13 +182,14 @@ def edit_user(id):
         flash(USER_NOT_FOUND, category="error")
         return redirect(url_for('home_blp.home_page'))
     form = UpdateProfileForm(obj=user)
-    if request.method == 'POST' and form.validate_on_submit():
+    if request.method == 'POST':
         user.first_name = form.first_name.data
         user.last_name = form.last_name.data
         user.email = form.email.data
         user.phone_no = form.phone_no.data
         user.user_type = form.user_type.data
-        user.is_active = form.is_active.data
+        if form.is_active.data:
+            user.is_active = form.is_active.data
         user.date_registered = form.date_registered.data
         if form.password.data:
             user.password = pbkdf2_sha256.hash(form.password.data)
